@@ -25,14 +25,17 @@
                     <td>{{ article.updatedAt|date('Y/m/d') }}</td>
                     <td>{{ article.title }}</td>
                     <td>
-{#                        <a href="{{ url('article_show', {id: article.id}) }}" title="{{ 'action.view'|trans }}">#}
-{#                            {{ 'action.view'|trans }}#}
-{#                        </a>#}
+                        <a href="{{ url('article_show', {id: article.id}) }}" title="{{ 'action.view'|trans }}">
+                            {{ 'action.view'|trans }}
+                        </a>
                     </td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
+        <div class="navigation text-center">
+            {{ knp_pagination_render(pagination) }}
+        </div>
     {% else %}
         <p>
             {{ 'message.empty_list'|trans }}

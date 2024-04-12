@@ -5,6 +5,7 @@
 
 namespace App\Service;
 
+use App\Entity\Article;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 
 /**
@@ -20,4 +21,6 @@ interface ArticleServiceInterface
      * @return PaginationInterface<string, mixed> Paginated list
      */
     public function getPaginatedList(int $page): PaginationInterface;
+
+    public function save(Article $article): void;
 }

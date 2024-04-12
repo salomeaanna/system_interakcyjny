@@ -26,6 +26,7 @@ class ArticleFixtures extends AbstractBaseFixtures
             $article->setUpdatedAt(
                 \DateTimeImmutable::createFromMutable($this->faker->dateTimeBetween('-100 days', '-1 days'))
             );
+            $article->setContent($this->faker->sentence);
             $this->manager->persist($article);
         }
 

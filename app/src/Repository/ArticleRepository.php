@@ -7,6 +7,8 @@ namespace App\Repository;
 
 use App\Entity\Article;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -45,13 +47,28 @@ class ArticleRepository extends ServiceEntityRepository
     }
 
     /**
+     * Save entity.
+     *
+     * @param Article $article Article entity
+     *
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function save(Article $article): void
+    {
+        assert($this->_em instanceof EntityManager);
+        $this->_em->persist($article);
+        $this->_em->flush();
+    }
+
+    /**
      * Get or create new query builder.
      *
      * @param QueryBuilder|null $queryBuilder Query builder
      *
      * @return QueryBuilder Query builder
      */
-    private function getOrCreateQueryBuilder(?QueryBuilder $queryBuilder = null): QueryBuilder
+    private function getOrCreateQueryBuilder(QueryBuilder $queryBuilder = null): QueryBuilder
     {
         return $queryBuilder ?? $this->createQueryBuilder('article');
     }

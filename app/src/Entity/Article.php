@@ -6,8 +6,10 @@
 namespace App\Entity;
 
 use App\Repository\ArticleRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use DateTimeImmutable;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Class Article.
@@ -32,6 +34,7 @@ class Article
      * @psalm-suppress PropertyNotSetInConstructor
      */
     #[ORM\Column(type: 'datetime_immutable')]
+    #[Gedmo\Timestampable(on: 'create')]
     private ?DateTimeImmutable $createdAt = null;
 
     /**
@@ -47,6 +50,21 @@ class Article
      */
     #[ORM\Column(type: 'string', length: 255)]
     private ?string $title = null;
+
+    /**
+     * Article content.
+     */
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $content = null;
+
+    /**
+     * Slug.
+     *
+     * @var string|null
+     */
+    #[ORM\Column(length: 255)]
+    #[Gedmo\Slug(fields: ['title'])]
+    private ?string $slug = null;
 
     /**
      * Getter for Id.
@@ -117,4 +135,36 @@ class Article
     {
         $this->title = $title;
     }
+
+    /**
+     * Getter for Article content.
+     *
+     * @return string|null Article content
+     */
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+
+    /**
+     * Setter for Article content.
+     *
+     * @param string|null $content Article content
+     */
+    public function setContent(?string $content): void
+    {
+        $this->content = $content;
+    }
+
+//    public function getSlug(): ?string
+//    {
+//        return $this->slug;
+//    }
+//
+//    public function setSlug(string $slug): static
+//    {
+//        $this->slug = $slug;
+//
+//        return $this;
+//    }
 }
