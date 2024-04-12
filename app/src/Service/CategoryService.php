@@ -1,21 +1,22 @@
 <?php
 /**
- * Article Service.
+ * Category interface.
  */
 
 namespace App\Service;
 
-use App\Entity\Article;
+use App\Entity\Category;
 use App\Repository\ArticleRepository;
+use App\Repository\CategoryRepository;
 use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\NoResultException;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
 
 /**
- * Class Article service.
+ * Class CategoryService.
  */
-class ArticleService implements ArticleServiceInterface
+class CategoryService implements CategoryServiceInterface
 {
     /**
      * Items per page.
@@ -31,10 +32,10 @@ class ArticleService implements ArticleServiceInterface
     /**
      * Constructor.
      *
-     * @param ArticleRepository  $articleRepository Article repository
-     * @param PaginatorInterface $paginator         Paginator interface
+     * @param CategoryRepository $categoryRepository Article repository
+     * @param PaginatorInterface $paginator          Paginator interface
      */
-    public function __construct(private readonly ArticleRepository $articleRepository, private readonly PaginatorInterface $paginator)
+    public function __construct(private readonly CategoryRepository $categoryRepository, private readonly PaginatorInterface $paginator)
     {
     }
 
@@ -50,7 +51,7 @@ class ArticleService implements ArticleServiceInterface
     public function getPaginatedList(int $page): PaginationInterface
     {
         return $this->paginator->paginate(
-            $this->articleRepository->queryAll(),
+            $this->categoryRepository->queryAll(),
             $page,
             self::PAGINATOR_ITEMS_PER_PAGE
         );
@@ -59,10 +60,11 @@ class ArticleService implements ArticleServiceInterface
     /**
      * Save entity.
      *
-     * @param Article $article Article entity
+     * @param Category $category Article entity
      */
-    public function save(Article $article): void
+    public function save(Category $category): void
     {
-        $this->articleRepository->save($article);
+        $this->categoryRepository->save($category);
     }
+
 }

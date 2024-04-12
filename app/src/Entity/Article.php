@@ -67,6 +67,15 @@ class Article
     private ?string $slug = null;
 
     /**
+     * Categories.
+     *
+     * @var Category|null Category.
+     */
+    #[ORM\ManyToOne(targetEntity: Category::class, fetch: 'EXTRA_LAZY', inversedBy: 'articles')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Category $category = null;
+
+    /**
      * Getter for Id.
      *
      * @return int|null Id
@@ -167,4 +176,24 @@ class Article
 //
 //        return $this;
 //    }
+
+    /**
+     * Getter for category.
+     *
+     * @return Category|null Category
+     */
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    /**
+     * Setter for category.
+     *
+     * @param Category|null $category
+     */
+    public function setCategory(?Category $category): void
+    {
+        $this->category = $category;
+    }
 }

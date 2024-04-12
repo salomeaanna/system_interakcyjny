@@ -1,17 +1,17 @@
 <?php
 /**
- * Article service interface.
+ * Category service interface.
  */
 
 namespace App\Service;
 
-use App\Entity\Article;
+use App\Entity\Category;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 
 /**
- * Interface ArticleServiceInterface.
+ * Interface CategoryServiceInterface.
  */
-interface ArticleServiceInterface
+interface CategoryServiceInterface
 {
     /**
      * Get paginated list.
@@ -25,9 +25,9 @@ interface ArticleServiceInterface
     /**
      * Save entity.
      *
-     * @param Article $article
+     * @param Category $category
      *
      * @return void
      */
-    public function save(Article $article): void;
+    public function save(Category $category): void;
 }
