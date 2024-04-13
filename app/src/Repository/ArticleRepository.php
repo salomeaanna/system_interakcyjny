@@ -43,7 +43,10 @@ class ArticleRepository extends ServiceEntityRepository
      */
     public function queryAll(): QueryBuilder
     {
-        return $this->getOrCreateQueryBuilder()->orderBy('article.updatedAt', 'DESC');
+        return $this->getOrCreateQueryBuilder()
+            ->select('category', 'article')
+            ->join('article.category', 'category')
+            ->orderBy('article.updatedAt', 'DESC');
     }
 
     /**

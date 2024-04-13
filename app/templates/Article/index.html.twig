@@ -14,6 +14,7 @@
                 <th>{{ 'label.created_at'|trans }}</th>
                 <th>{{ 'label.updated_at'|trans }}</th>
                 <th>{{ 'label.title'|trans }}</th>
+                <th>{{ 'label.category'|trans }}</th>
                 <th>{{ 'label.actions'|trans }}</th>
             </tr>
             </thead>
@@ -24,6 +25,7 @@
                     <td>{{ article.createdAt|date('Y/m/d') }}</td>
                     <td>{{ article.updatedAt|date('Y/m/d') }}</td>
                     <td>{{ article.title }}</td>
+                    <td>{{ article.category.title }}</td>
                     <td>
                         <a href="{{ url('article_show', {id: article.id}) }}" title="{{ 'action.view'|trans }}">
                             {{ 'action.view'|trans }}
