@@ -7,8 +7,8 @@ namespace App\Entity;
 
 use App\Repository\ArticleRepository;
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping as ORM;
 use DateTimeImmutable;
+use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -36,7 +36,8 @@ class Article
      */
     #[ORM\Column(type: 'datetime_immutable')]
     #[Gedmo\Timestampable(on: 'create')]
-    private ?DateTimeImmutable $createdAt = null;
+    #[Assert\Type(DateTimeImmutable::class)]
+    private ?\DateTimeImmutable $createdAt = null;
 
     /**
      * Updated at.
@@ -44,14 +45,16 @@ class Article
      * @psalm-suppress PropertyNotSetInConstructor
      */
     #[ORM\Column(type: 'datetime_immutable')]
-    private ?DateTimeImmutable $updatedAt = null;
+    #[Assert\Type(DateTimeImmutable::class)]
+    private ?\DateTimeImmutable $updatedAt = null;
 
     /**
      * Title.
      */
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank]
-    #[Assert\Length(min: 3, max: 64)]
+    #[Assert\Length(min: 3, max: 255)]
+    #[Assert\Type('string')]
     private ?string $title = null;
 
     /**
@@ -62,20 +65,22 @@ class Article
 
     /**
      * Slug.
-     *
-     * @var string|null
      */
     #[ORM\Column(length: 255)]
     #[Gedmo\Slug(fields: ['title'])]
+    #[Assert\Length(min: 3, max: 255)]
+    #[Assert\Type('string')]
     private ?string $slug = null;
 
     /**
      * Categories.
      *
-     * @var Category|null Category.
+     * @var Category|null category
      */
     #[ORM\ManyToOne(targetEntity: Category::class, fetch: 'EXTRA_LAZY')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\Type(Category::class)]
+    #[Assert\NotBlank]
     private ?Category $category = null;
 
     /**
@@ -91,9 +96,9 @@ class Article
     /**
      * Getter for Created at.
      *
-     * @return DateTimeImmutable|null Created at
+     * @return \DateTimeImmutable|null Created at
      */
-    public function getCreatedAt(): ?DateTimeImmutable
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
     }
@@ -101,9 +106,9 @@ class Article
     /**
      * Setter for Created at.
      *
-     * @param DateTimeImmutable $createdAt Created at
+     * @param \DateTimeImmutable $createdAt Created at
      */
-    public function setCreatedAt(DateTimeImmutable $createdAt): void
+    public function setCreatedAt(\DateTimeImmutable $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -111,9 +116,9 @@ class Article
     /**
      * Getter for Updated at.
      *
-     * @return DateTimeImmutable|null Updated at
+     * @return \DateTimeImmutable|null Updated at
      */
-    public function getUpdatedAt(): ?DateTimeImmutable
+    public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->updatedAt;
     }
@@ -121,9 +126,9 @@ class Article
     /**
      * Setter for Updated at.
      *
-     * @param DateTimeImmutable $updatedAt Updated at
+     * @param \DateTimeImmutable $updatedAt Updated at
      */
-    public function setUpdatedAt(DateTimeImmutable $updatedAt): void
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }
@@ -168,17 +173,17 @@ class Article
         $this->content = $content;
     }
 
-//    public function getSlug(): ?string
-//    {
-//        return $this->slug;
-//    }
-//
-//    public function setSlug(string $slug): static
-//    {
-//        $this->slug = $slug;
-//
-//        return $this;
-//    }
+    //    public function getSlug(): ?string
+    //    {
+    //        return $this->slug;
+    //    }
+    //
+    //    public function setSlug(string $slug): static
+    //    {
+    //        $this->slug = $slug;
+    //
+    //        return $this;
+    //    }
 
     /**
      * Getter for category.
@@ -193,7 +198,7 @@ class Article
     /**
      * Setter for category.
      *
-     * @param Category|null $category
+     * @param Category $category Category
      */
     public function setCategory(?Category $category): void
     {

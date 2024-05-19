@@ -34,8 +34,11 @@ class CategoryService implements CategoryServiceInterface
      *
      * @param CategoryRepository $categoryRepository Article repository
      * @param PaginatorInterface $paginator          Paginator interface
+     * @param ArticleRepository  $articleRepository  Article repository
      */
-    public function __construct(private readonly CategoryRepository $categoryRepository, private readonly PaginatorInterface $paginator)
+    public function __construct(private readonly CategoryRepository $categoryRepository,
+                                private readonly PaginatorInterface $paginator,
+                                private readonly ArticleRepository $articleRepository)
     {
     }
 
@@ -64,7 +67,40 @@ class CategoryService implements CategoryServiceInterface
      */
     public function save(Category $category): void
     {
+        if (null === $category->getId()) {
+            $category->setCreatedAt(new \DateTimeImmutable());
+        }
+        $category->setUpdatedAt(new \DateTimeImmutable());
+
         $this->categoryRepository->save($category);
     }
 
+    /**
+     * Delete entity.
+     *
+     * @param Category $category Category entity
+     */
+    public function delete(Category $category): void
+    {
+        $this->categoryRepository->delete($category);
+    }
+
+    /**
+     * Can category be deleted?
+     *
+     * @param Category $category Category entity
+     *
+     * @return bool Result
+     */
+    public function canBeDeleted(Category $category): bool
+    {
+        try {
+            $result = $this->articleRepository->countByCategory($category);
+
+            return !($result > 0);
+        } catch (NoResultException|NonUniqueResultException) {
+            return false;
+        }
+
+    }
 }

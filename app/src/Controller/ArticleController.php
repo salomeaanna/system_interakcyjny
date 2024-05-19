@@ -8,6 +8,7 @@ namespace App\Controller;
 use App\Entity\Article;
 use App\Form\Type\ArticleType;
 use App\Service\ArticleServiceInterface;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpFoundation\Response;
@@ -97,5 +98,97 @@ class ArticleController extends AbstractController
         }
 
         return $this->render('Article/create.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
+     * Edit action.
+     *
+     * @param Request $request Http request
+     * @param Article $article Article entity
+     *
+     * @return Response Http response
+     */
+    #[Route(
+        '/{id}/edit',
+        name: 'article_edit',
+        requirements: ['id' => '[1-9]\d*'],
+        methods: 'GET|PUT'
+    )]
+    public function edit(Request $request, Article $article): Response
+    {
+        $form = $this->createForm(
+            ArticleType::class,
+            $article,
+            [
+                'method' => 'PUT',
+                'action' => $this->generateUrl('article_edit', ['id' => $article->getId()]),
+            ]
+        );
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->articleService->save($article);
+
+            $this->addFlash(
+                'success',
+                $this->translator->trans('message.edited_successfully')
+            );
+
+            return $this->redirectToRoute('article_index');
+        }
+
+        return $this->render(
+            'Article/edit.html.twig',
+            [
+                'form' => $form->createView(),
+                'article' => $article,
+            ]
+        );
+    }
+
+    /**
+     * Delete action.
+     *
+     * @param Request $request Http request
+     * @param Article $article Article entity
+     *
+     * @return Response Http response
+     */
+    #[Route(
+        '/{id}/delete',
+        name: 'article_delete',
+        requirements: ['id' => '[1-9]\d*'],
+        methods: 'GET|DELETE'
+    )]
+    public function delete(Request $request, Article $article): Response
+    {
+        $form = $this->createForm(
+            FormType::class,
+            $article,
+            [
+                'method' => 'DELETE',
+                'action' => $this->generateUrl('article_delete', ['id' => $article->getId()]),
+            ]
+        );
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->articleService->delete($article);
+
+            $this->addFlash(
+                'success',
+                $this->translator->trans('message.deleted_successfully')
+            );
+
+            return $this->redirectToRoute('article_index');
+        }
+
+        return $this->render(
+            'Article/delete.html.twig',
+            [
+                'form' => $form->createView(),
+                'article' => $article,
+            ]
+        );
     }
 }

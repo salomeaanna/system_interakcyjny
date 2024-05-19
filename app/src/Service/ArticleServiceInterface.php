@@ -6,6 +6,7 @@
 namespace App\Service;
 
 use App\Entity\Article;
+use App\Entity\Category;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 
 /**
@@ -25,9 +26,14 @@ interface ArticleServiceInterface
     /**
      * Save entity.
      *
-     * @param Article $article
-     *
-     * @return void
+     * @param Article $article Article entity
      */
     public function save(Article $article): void;
+
+    /**
+     * Delete entity.
+     *
+     * @param Article $article Article entity
+     */
+    public function delete(Article $article): void;
 }

@@ -7,6 +7,8 @@
 {% block body %}
     <h1>{{ 'title.article_list'|trans }}</h1>
     {% if pagination is defined and pagination.items|length %}
+        <a href="{{ url('article_create') }}" title="{{ 'action.create_article'|trans }}">
+            {{ 'action.create_article'|trans }}</a>
         <table class="table table-striped">
             <thead>
             <tr>
@@ -30,6 +32,12 @@
                         <a href="{{ url('article_show', {id: article.id}) }}" title="{{ 'action.view'|trans }}">
                             {{ 'action.view'|trans }}
                         </a>
+                        <a href="{{ url('article_edit', {id: article.id}) }}" title="{{ 'action.edit'|trans }}">
+                            {{ 'action.edit'|trans }}
+                        </a>
+                        <a href="{{ url('article_delete', {id: article.id}) }}" title="{{ 'action.delete'|trans }}">
+                            {{ 'action.delete'|trans }}
+                        </a>
                     </td>
                 </tr>
             {% endfor %}
@@ -40,7 +48,10 @@
         </div>
     {% else %}
         <p>
-            {{ 'message.empty_list'|trans }}
+            {% include 'default/_single_alert_message.html.twig' with {
+                type: 'warning',
+                message: 'message.empty_list'|trans
+            } %}
         </p>
     {% endif %}
 {% endblock %}

@@ -8,7 +8,6 @@ namespace App\Service;
 use App\Entity\Article;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\OptimisticLockException;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
 
@@ -63,6 +62,21 @@ class ArticleService implements ArticleServiceInterface
      */
     public function save(Article $article): void
     {
+        if (null === $article->getId()) {
+            $article->setCreatedAt(new \DateTimeImmutable());
+        }
+        $article->setUpdatedAt(new \DateTimeImmutable());
+
         $this->articleRepository->save($article);
+    }
+
+    /**
+     * Delete action.
+     *
+     * @param Article $article Article entity
+     */
+    public function delete(Article $article): void
+    {
+        $this->articleRepository->delete($article);
     }
 }
