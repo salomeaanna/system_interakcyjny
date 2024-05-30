@@ -6,6 +6,8 @@
 namespace App\Entity;
 
 use App\Repository\ArticleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -61,6 +63,9 @@ class Article
      * Article content.
      */
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\Type('string')]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 3)]
     private ?string $content = null;
 
     /**
@@ -84,6 +89,23 @@ class Article
     private ?Category $category = null;
 
     /**
+     * Comments.
+     *
+     * @var Collection<int, Comment> Comment collection
+     */
+    #[ORM\OneToMany(mappedBy: 'article', targetEntity: Comment::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name: 'article_id', referencedColumnName: 'id')]
+    private Collection $comments;
+
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        $this->comments = new ArrayCollection();
+    }
+
+    /**
      * Getter for Id.
      *
      * @return int|null Id
@@ -96,9 +118,9 @@ class Article
     /**
      * Getter for Created at.
      *
-     * @return \DateTimeImmutable|null Created at
+     * @return DateTimeImmutable|null Created at
      */
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }
@@ -106,9 +128,9 @@ class Article
     /**
      * Setter for Created at.
      *
-     * @param \DateTimeImmutable $createdAt Created at
+     * @param DateTimeImmutable $createdAt Created at
      */
-    public function setCreatedAt(\DateTimeImmutable $createdAt): void
+    public function setCreatedAt(DateTimeImmutable $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -116,9 +138,9 @@ class Article
     /**
      * Getter for Updated at.
      *
-     * @return \DateTimeImmutable|null Updated at
+     * @return DateTimeImmutable|null Updated at
      */
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
     }
@@ -126,9 +148,9 @@ class Article
     /**
      * Setter for Updated at.
      *
-     * @param \DateTimeImmutable $updatedAt Updated at
+     * @param DateTimeImmutable $updatedAt Updated at
      */
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): void
+    public function setUpdatedAt(DateTimeImmutable $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }
@@ -203,5 +225,43 @@ class Article
     public function setCategory(?Category $category): void
     {
         $this->category = $category;
+    }
+
+    /**
+     * Getter for comments.
+     *
+     * @return Collection<int, Comment> comment
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    /**
+     * Add comment.
+     *
+     * @param Comment $comment comment
+     */
+    public function addComment(Comment $comment): void
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setArticle($this);
+        }
+    }
+
+    /**
+     * Remove comment.
+     *
+     * @param Comment $comment comment
+     */
+    public function removeComment(Comment $comment): void
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getArticle() === $this) {
+                $comment->setArticle(null);
+            }
+        }
     }
 }

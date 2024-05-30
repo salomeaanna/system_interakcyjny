@@ -6,8 +6,12 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Entity\Comment;
 use App\Form\Type\ArticleType;
+use App\Form\Type\CommentType;
 use App\Service\ArticleServiceInterface;
+use App\Service\CommentService;
+use App\Service\CommentServiceInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
@@ -47,7 +51,7 @@ class ArticleController extends AbstractController
     {
         $pagination = $this->articleService->getPaginatedList($page);
 
-        return $this->render('Article/index.html.twig', ['pagination' => $pagination]);
+        return $this->render('article/index.html.twig', ['pagination' => $pagination]);
     }
 
     /**
@@ -61,11 +65,28 @@ class ArticleController extends AbstractController
         '/{id}',
         name: 'article_show',
         requirements: ['id' => '[1-9]\d*'],
-        methods: 'GET'
+        methods: 'GET|POST'
     )]
-    public function show(Article $article): Response
+    public function show(Article $article, Request $request, CommentServiceInterface $commentService): Response
     {
-        return $this->render('Article/show.html.twig', ['article' => $article]);
+        $comment = new Comment();
+        $commentForm = $this->createForm(CommentType::class, $comment, ['method' => 'POST']);
+
+        $commentForm->handleRequest($request);
+        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+            $comment->setArticle($article);
+            $commentService->save($comment);
+
+            $this->addFlash('success', 'comment_added');
+
+            return $this->redirectToRoute('article_show', ['id' => $article->getId()]);
+        }
+
+        return $this->render('article/show.html.twig', [
+            'article' => $article,
+            'comments' => $commentService->getForArticle($article),
+            'form' => $commentForm->createView(),
+        ]);
     }
 
     /**
@@ -97,7 +118,7 @@ class ArticleController extends AbstractController
             return $this->redirectToRoute('article_index');
         }
 
-        return $this->render('Article/create.html.twig', ['form' => $form->createView()]);
+        return $this->render('article/create.html.twig', ['form' => $form->createView()]);
     }
 
     /**
@@ -184,7 +205,7 @@ class ArticleController extends AbstractController
         }
 
         return $this->render(
-            'Article/delete.html.twig',
+            'article/delete.html.twig',
             [
                 'form' => $form->createView(),
                 'article' => $article,

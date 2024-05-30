@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ article.title }}
+{% endblock %}
+
+{% block body %}
+    {% if article is defined and article|length %}
+
+        <h1>{{ article.title }}</h1>
+        <p>{{ article.category.title }}</p>
+        <div class="container">
+            <a href="{{ url('article_index') }}" title="{{ 'action.back_to_article_list'|trans }}">
+                {{ 'action.back_to_article_list'|trans }}
+            </a>
+            <p>{{ article.content }}</p>
+        </div>
+        <h4>{{ 'label.comments'|trans}}</h4>
+        {% if comments is defined and comments|length%}
+            {% for comment in comments %}
+                <p>{{ comment.nick }}</p>
+                <p>{{ comment.email }}</p>
+                <p>{{ comment.comment}}</p>
+            {% endfor %}
+        {% else %}
+            <p>{{ 'message.no_comments'|trans }}</p>
+        {% endif %}
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <div class="form-group row float-sm-right">
+            <input type="submit" value="{{ 'action.save'|trans }}" class="btn btn-primary"/>
+        </div>
+        {{ form_end(form) }}
+    {% endif %}
+{% endblock %}
