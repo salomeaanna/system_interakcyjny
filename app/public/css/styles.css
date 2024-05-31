@@ -1,0 +1,16 @@
+body{
+    min-height: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.button-short{
+    max-width: 200px !important;
+    margin-left: 10px;
+    margin-block: 20px;
+}
+
+h1{
+    margin-block: 30px !important;
+}

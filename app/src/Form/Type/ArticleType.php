@@ -32,7 +32,7 @@ class ArticleType extends AbstractType
             'title',
             TextType::class,
             [
-                'label' => 'label.name',
+                'label' => 'label.article_name',
                 'required' => true,
                 'attr' => ['max_length' => 64],
             ]
@@ -50,7 +50,7 @@ class ArticleType extends AbstractType
             EntityType::class,
             [
                 'class' => Category::class,
-                'choice_label' => fn($category) => $category->getTitle(),
+                'choice_label' => fn ($category) => $category->getTitle(),
                 'label' => 'label.category',
                 'required' => true,
             ]

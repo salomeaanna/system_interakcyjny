@@ -6,30 +6,69 @@
 
 {% block body %}
     {% if article is defined and article|length %}
-
-        <h1>{{ article.title }}</h1>
-        <p>{{ article.category.title }}</p>
-        <div class="container">
-            <a href="{{ url('article_index') }}" title="{{ 'action.back_to_article_list'|trans }}">
+        <div class="container my-4">
+            <div class="row mb-3">
+                <div class="col">
+                    <h1>{{ article.title }}</h1>
+                    <span style="margin-block: 10px !important;">
+                        <b>{{ "label.category"|trans }}</b>
+                        <a class="btn-link"
+                           href="{{ url('article_index', {'categoryId' : article.category.id}) }}">
+                            {{ article.category.title }}
+                        </a>
+                    </span>
+                    <p class="card-text">{{ article.createdAt|date('Y/m/d') }}</p>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <p>{{ article.content }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a href="{{ path('article_index') }}" class="btn btn-secondary mb-3">
                 {{ 'action.back_to_article_list'|trans }}
             </a>
-            <p>{{ article.content }}</p>
+
+            <div class="row mb-4">
+                <div class="col">
+                    <h4>{{ 'label.comments'|trans }}</h4>
+                    {% if comments is defined and comments|length %}
+                        <div class="list-group">
+                            {% for comment in comments %}
+                                <div class="list-group-item">
+                                    <h5 class="mb-1">{{ comment.nick }}</h5>
+                                    <p class="mb-1">{{ comment.comment }}</p>
+                                    <small class="text-muted">{{ comment.email }}</small>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p>{{ 'message.no_comments'|trans }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <h4>{{ 'label.add_comment'|trans }}</h4>
+                    <div class="card">
+                        <div class="card-body">
+                            {{ form_start(form) }}
+                            {{ form_widget(form) }}
+                            <div class="form-group mt-3">
+                                <input type="submit" value="{{ 'action.save'|trans }}" class="btn btn-primary"/>
+                            </div>
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <h4>{{ 'label.comments'|trans}}</h4>
-        {% if comments is defined and comments|length%}
-            {% for comment in comments %}
-                <p>{{ comment.nick }}</p>
-                <p>{{ comment.email }}</p>
-                <p>{{ comment.comment}}</p>
-            {% endfor %}
-        {% else %}
-            <p>{{ 'message.no_comments'|trans }}</p>
-        {% endif %}
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <div class="form-group row float-sm-right">
-            <input type="submit" value="{{ 'action.save'|trans }}" class="btn btn-primary"/>
-        </div>
-        {{ form_end(form) }}
+    {% else %}
+        <p>{{ 'message.article_not_found'|trans }}</p>
     {% endif %}
 {% endblock %}

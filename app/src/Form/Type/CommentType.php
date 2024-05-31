@@ -19,10 +19,8 @@ class CommentType extends AbstractType
     /**
      * Builds form.
      *
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     *
-     * @return void
+     * @param FormBuilderInterface $builder Form builder
+     * @param array                $options Options
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -57,9 +55,7 @@ class CommentType extends AbstractType
     /**
      * Configures options for this type.
      *
-     * @param OptionsResolver $resolver
-     *
-     * @return void
+     * @param OptionsResolver $resolver Resolver
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
@@ -72,7 +68,7 @@ class CommentType extends AbstractType
      * The block prefix defaults to the underscored short class name with
      * the "Type" suffix removed (e.g. "UserProfileType" => "user_profile").
      *
-     * @return string
+     * @return string Prefix
      */
     public function getBlockPrefix(): string
     {

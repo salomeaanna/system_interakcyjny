@@ -5,6 +5,8 @@
 
 namespace App\Service;
 
+use App\Dto\ArticleListInputFiltersDto;
+use App\Dto\ArticleListFiltersDto;
 use App\Entity\Article;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\NonUniqueResultException;
@@ -30,26 +32,30 @@ class ArticleService implements ArticleServiceInterface
     /**
      * Constructor.
      *
-     * @param ArticleRepository  $articleRepository Article repository
-     * @param PaginatorInterface $paginator         Paginator interface
+     * @param ArticleRepository        $articleRepository Article repository
+     * @param PaginatorInterface       $paginator         Paginator interface
+     * @param CategoryServiceInterface $categoryService   Category service
      */
-    public function __construct(private readonly ArticleRepository $articleRepository, private readonly PaginatorInterface $paginator)
+    public function __construct(private readonly ArticleRepository $articleRepository, private readonly PaginatorInterface $paginator, private readonly CategoryServiceInterface $categoryService)
     {
     }
 
     /**
      * Get paginated List.
      *
-     * @param int $page Page number
+     * @param int                        $page    Page number
+     * @param ArticleListInputFiltersDto $filters Filters
      *
      * @return PaginationInterface<string, mixed> Paginated list
      *
      * @throws NonUniqueResultException
      */
-    public function getPaginatedList(int $page): PaginationInterface
+    public function getPaginatedList(int $page, ArticleListInputFiltersDto $filters): PaginationInterface
     {
+        $filters = $this->prepareFilters($filters);
+
         return $this->paginator->paginate(
-            $this->articleRepository->queryAll(),
+            $this->articleRepository->queryAll($filters),
             $page,
             self::PAGINATOR_ITEMS_PER_PAGE
         );
@@ -78,5 +84,19 @@ class ArticleService implements ArticleServiceInterface
     public function delete(Article $article): void
     {
         $this->articleRepository->delete($article);
+    }
+
+    /**
+     * Prepare filters for the article list.
+     *
+     * @param ArticleListInputFiltersDto $filters Raw filters form request
+     *
+     * @return ArticleListFiltersDto Result filters
+     */
+    public function prepareFilters(ArticleListInputFiltersDto $filters): ArticleListFiltersDto
+    {
+        return new ArticleListFiltersDto(
+            null !== $filters->categoryId ? $this->categoryService->findOneById($filters->categoryId) : null
+        );
     }
 }

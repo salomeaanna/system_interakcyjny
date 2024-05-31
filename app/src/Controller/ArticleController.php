@@ -5,19 +5,22 @@
 
 namespace App\Controller;
 
+use App\Dto\ArticleListInputFiltersDto;
 use App\Entity\Article;
 use App\Entity\Comment;
 use App\Form\Type\ArticleType;
 use App\Form\Type\CommentType;
+use App\Resolver\ArticleListInputFilterDtoResolver;
 use App\Service\ArticleServiceInterface;
-use App\Service\CommentService;
 use App\Service\CommentServiceInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -38,7 +41,8 @@ class ArticleController extends AbstractController
     /**
      * Index action.
      *
-     * @param int $page HTTP Request
+     * @param ArticleListInputFiltersDto $filters Filters
+     * @param int                        $page    HTTP Request
      *
      * @return Response HTTP Response
      */
@@ -47,9 +51,12 @@ class ArticleController extends AbstractController
         name: 'article_index',
         methods: 'GET'
     )]
-    public function index(#[MapQueryParameter] int $page = 1): Response
+    public function index(#[MapQueryString(resolver: ArticleListInputFilterDtoResolver::class)] ArticleListInputFiltersDto $filters, #[MapQueryParameter] int $page = 1): Response
     {
-        $pagination = $this->articleService->getPaginatedList($page);
+        $pagination = $this->articleService->getPaginatedList(
+            $page,
+            $filters
+        );
 
         return $this->render('article/index.html.twig', ['pagination' => $pagination]);
     }
@@ -57,7 +64,9 @@ class ArticleController extends AbstractController
     /**
      * Show action.
      *
-     * @param Article $article Article entity
+     * @param Article                 $article        Article entity
+     * @param Request                 $request        Http request
+     * @param CommentServiceInterface $commentService Comment service interface
      *
      * @return Response HTTP response
      */
@@ -97,6 +106,7 @@ class ArticleController extends AbstractController
      * @return Response HTTP response
      */
     #[Route('/create', name: 'article_create', methods: 'GET|POST')]
+    #[IsGranted('ROLE_ADMIN')]
     public function create(Request $request): Response
     {
         $article = new Article();
@@ -135,6 +145,7 @@ class ArticleController extends AbstractController
         requirements: ['id' => '[1-9]\d*'],
         methods: 'GET|PUT'
     )]
+    #[IsGranted('EDIT', subject: 'article')]
     public function edit(Request $request, Article $article): Response
     {
         $form = $this->createForm(
@@ -159,7 +170,7 @@ class ArticleController extends AbstractController
         }
 
         return $this->render(
-            'Article/edit.html.twig',
+            'article/edit.html.twig',
             [
                 'form' => $form->createView(),
                 'article' => $article,
@@ -181,6 +192,7 @@ class ArticleController extends AbstractController
         requirements: ['id' => '[1-9]\d*'],
         methods: 'GET|DELETE'
     )]
+    #[IsGranted('DELETE', subject: 'article')]
     public function delete(Request $request, Article $article): Response
     {
         $form = $this->createForm(

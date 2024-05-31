@@ -6,43 +6,55 @@
 
 {% block body %}
     <h1>{{ 'title.article_list'|trans }}</h1>
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ url('article_create') }}"
+           title="{{ 'action.create_article'|trans }}"
+           class="btn btn-success button-short">
+            {{ 'action.create_article'|trans }}
+        </a>
+    {% endif %}
+    <div class="row">
     {% if pagination is defined and pagination.items|length %}
-        <a href="{{ url('article_create') }}" title="{{ 'action.create_article'|trans }}">
-            {{ 'action.create_article'|trans }}</a>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>{{ 'label.id'|trans }}</th>
-                <th>{{ 'label.created_at'|trans }}</th>
-                <th>{{ 'label.updated_at'|trans }}</th>
-                <th>{{ 'label.title'|trans }}</th>
-                <th>{{ 'label.category'|trans }}</th>
-                <th>{{ 'label.actions'|trans }}</th>
-            </tr>
-            </thead>
-            <tbody>
             {% for article in pagination.items %}
-                <tr>
-                    <td>{{ article.id }}</td>
-                    <td>{{ article.createdAt|date('Y/m/d') }}</td>
-                    <td>{{ article.updatedAt|date('Y/m/d') }}</td>
-                    <td>{{ article.title }}</td>
-                    <td>{{ article.category.title }}</td>
-                    <td>
-                        <a href="{{ url('article_show', {id: article.id}) }}" title="{{ 'action.view'|trans }}">
-                            {{ 'action.view'|trans }}
-                        </a>
-                        <a href="{{ url('article_edit', {id: article.id}) }}" title="{{ 'action.edit'|trans }}">
-                            {{ 'action.edit'|trans }}
-                        </a>
-                        <a href="{{ url('article_delete', {id: article.id}) }}" title="{{ 'action.delete'|trans }}">
-                            {{ 'action.delete'|trans }}
-                        </a>
-                    </td>
-                </tr>
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ article.title }}</h5>
+                            <span style="margin-block: 10px !important;">
+                                <b>{{ "label.category"|trans }}:</b>
+                                <a class="btn-link"
+                                   href="{{ url('article_index', {'categoryId' : article.category.id}) }}">
+                                    {{ article.category.title }}
+                                </a>
+                            </span>
+                            <p class="card-text">{{ article.createdAt|date('Y/m/d') }}</p>
+
+
+
+                            <a href="{{ url('article_show', {id: article.id}) }}"
+                               title="{{ 'action.view'|trans }}"
+                               class="btn btn-primary">
+                                {{ 'action.view'|trans }}
+                            </a>
+                            {% if is_granted('ROLE_ADMIN') %}
+                            <a href="{{ url('article_edit', {id: article.id}) }}"
+                               title="{{ 'action.edit'|trans }}"
+                               class="btn btn-outline-info">
+                                {{ 'action.edit'|trans }}
+                            </a>
+                            <a href="{{ url('article_delete', {id: article.id}) }}"
+                               title="{{ 'action.delete'|trans }}"
+                               class="btn btn-outline-danger">
+                                {{ 'action.delete'|trans }}
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
             {% endfor %}
-            </tbody>
-        </table>
+            </div>
+{#            </tbody>#}
+{#        </table>#}
         <div class="navigation text-center">
             {{ knp_pagination_render(pagination) }}
         </div>

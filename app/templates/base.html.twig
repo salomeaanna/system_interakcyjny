@@ -9,15 +9,16 @@
               crossorigin="anonymous">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
               rel="stylesheet">
-        <link rel="stylesheet" href="{{ asset('style.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     {% endblock %}
 </head>
 <body>
 {% include 'default/_nav.html.twig' %}
-<main role="main" class="container-fluid">
-
+<main role="main" class="container">
+    <div class="row">
     {% include 'default/_flash_messages.html.twig' %}
     {% block body %}{% endblock %}
+    </div>
 </main>
 {% include 'default/_footer.html.twig' %}
 {% block javascripts %}

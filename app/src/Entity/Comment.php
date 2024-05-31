@@ -1,4 +1,7 @@
 <?php
+/**
+ * Comment entity.
+ */
 
 namespace App\Entity;
 
@@ -7,6 +10,9 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * Class Comment.
+ */
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment
 {
@@ -23,7 +29,7 @@ class Comment
     /**
      * Nick.
      *
-* @var string|null nick
+     * @var string|null nick
      */
     #[ORM\Column(length: 64)]
     #[Assert\Type('string')]
@@ -34,10 +40,11 @@ class Comment
     /**
      * Email.
      *
-* @var string|null email
+     * @var string|null email
      */
     #[ORM\Column(length: 64)]
     #[Assert\Type('string')]
+    #[Assert\Email]
     #[Assert\NotNull]
     #[Assert\Length(min: 3, max: 64)]
     private ?string $email = null;
@@ -45,7 +52,7 @@ class Comment
     /**
      * Comment.
      *
-* @var string|null comment
+     * @var string|null comment
      */
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\Type('string')]
@@ -56,15 +63,17 @@ class Comment
     /**
      * Article.
      *
-* @var Article|null article
+     * @var Article|null article
      */
     #[ORM\ManyToOne(inversedBy: 'comments')]
+    #[Assert\Type(Article::class)]
+    #[Assert\NotBlank]
     private ?Article $article = null;
 
     /**
      * Getter for id.
      *
-* @return int|null id
+     * @return int|null id
      */
     public function getId(): ?int
     {
@@ -74,7 +83,7 @@ class Comment
     /**
      * Getter for nick.
      *
-* @return string|null nick
+     * @return string|null nick
      */
     public function getNick(): ?string
     {
@@ -83,7 +92,8 @@ class Comment
 
     /**
      * Setter for nick.
-* @param string $nick nick
+     *
+     * @param string $nick nick
      */
     public function setNick(string $nick): void
     {
@@ -93,7 +103,7 @@ class Comment
     /**
      * Getter for email.
      *
-* @return string|null email
+     * @return string|null email
      */
     public function getEmail(): ?string
     {
@@ -103,7 +113,7 @@ class Comment
     /**
      * Setter for email.
      *
-* @param string $email email
+     * @param string $email email
      */
     public function setEmail(string $email): void
     {
@@ -113,7 +123,7 @@ class Comment
     /**
      * Getter for comment.
      *
-* @return string|null comment
+     * @return string|null comment
      */
     public function getComment(): ?string
     {
@@ -123,7 +133,7 @@ class Comment
     /**
      * Setter for comment.
      *
-* @param string $comment comment
+     * @param string $comment comment
      */
     public function setComment(string $comment): void
     {
@@ -133,7 +143,7 @@ class Comment
     /**
      * Getter for article.
      *
-* @return Article|null article
+     * @return Article|null article
      */
     public function getArticle(): ?Article
     {
@@ -143,7 +153,7 @@ class Comment
     /**
      * Setter for article.
      *
-* @param Article|null $article article
+     * @param Article|null $article article
      */
     public function setArticle(?Article $article): void
     {

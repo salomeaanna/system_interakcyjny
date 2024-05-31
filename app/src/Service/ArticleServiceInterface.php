@@ -5,8 +5,9 @@
 
 namespace App\Service;
 
+use App\Dto\ArticleListFiltersDto;
+use App\Dto\ArticleListInputFiltersDto;
 use App\Entity\Article;
-use App\Entity\Category;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 
 /**
@@ -17,11 +18,12 @@ interface ArticleServiceInterface
     /**
      * Get paginated list.
      *
-     * @param int $page Page number
+     * @param int                        $page    Page number
+     * @param ArticleListInputFiltersDto $filters Filters
      *
      * @return PaginationInterface<string, mixed> Paginated list
      */
-    public function getPaginatedList(int $page): PaginationInterface;
+    public function getPaginatedList(int $page, ArticleListInputFiltersDto $filters): PaginationInterface;
 
     /**
      * Save entity.
@@ -36,4 +38,13 @@ interface ArticleServiceInterface
      * @param Article $article Article entity
      */
     public function delete(Article $article): void;
+
+    /**
+     * Prepare filters for the article list.
+     *
+     * @param ArticleListInputFiltersDto $filters Raw filters form request
+     *
+     * @return ArticleListFiltersDto Result filters
+     */
+    public function prepareFilters(ArticleListInputFiltersDto $filters): ArticleListFiltersDto;
 }

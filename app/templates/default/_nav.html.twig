@@ -11,6 +11,21 @@
                         {{ 'label.categories'|trans }}
                     </a>
                 </li>
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <li>
+                        <a class="nav-link" href="{{ url('comment_index') }}" title="{{ 'menu.comments'|trans }}">{{ 'menu.comments'|trans }}</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="{{ url('user_edit') }}" title="{{ 'menu.settings'|trans }}">{{ 'menu.settings'|trans }}</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="{{ url('app_logout') }}" title="{{ 'menu.logout'|trans }}">{{ 'menu.logout'|trans }}</a>
+                    </li>
+                {% else %}
+                    <li>
+                        <a class="nav-link" href="{{ url('app_login') }}" title="{{ 'menu.login'|trans }}">{{ 'menu.login'|trans }}</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </div>

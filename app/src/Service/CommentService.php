@@ -8,6 +8,7 @@ namespace App\Service;
 use App\Entity\Article;
 use App\Entity\Comment;
 use App\Repository\CommentRepository;
+use Doctrine\ORM\Exception\ORMException;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
 
@@ -28,25 +29,13 @@ class CommentService implements CommentServiceInterface
     public const PAGINATOR_ITEMS_PER_PAGE = 10;
 
     /**
-     * Comment repository.
-     */
-    private CommentRepository $commentRepository;
-
-    /**
-     * Paginator interface.
-     */
-    private PaginatorInterface $paginator;
-
-    /**
      * Constructor.
      *
      * @param CommentRepository  $commentRepository Comment repository
      * @param PaginatorInterface $paginator         Paginator
      */
-    public function __construct(CommentRepository $commentRepository, PaginatorInterface $paginator)
+    public function __construct(private readonly CommentRepository $commentRepository, private readonly PaginatorInterface $paginator)
     {
-        $this->commentRepository = $commentRepository;
-        $this->paginator = $paginator;
     }
 
     /**
@@ -69,6 +58,8 @@ class CommentService implements CommentServiceInterface
      * Save entity.
      *
      * @param Comment $comment Comment entity
+     *
+     * @throws ORMException
      */
     public function save(Comment $comment): void
     {
@@ -78,9 +69,9 @@ class CommentService implements CommentServiceInterface
     /**
      * Delete entity.
      *
-     * @param Comment $comment
+     * @param Comment $comment Comment entity
      *
-     * @return void
+     * @throws ORMException
      */
     public function delete(Comment $comment): void
     {
@@ -90,9 +81,9 @@ class CommentService implements CommentServiceInterface
     /**
      * Get comments for article.
      *
-     * @param Article $article
+     * @param Article $article Article entity
      *
-     * @return array
+     * @return array Comments for article
      */
     public function getForArticle(Article $article): array
     {

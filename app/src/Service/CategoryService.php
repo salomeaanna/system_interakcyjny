@@ -36,9 +36,7 @@ class CategoryService implements CategoryServiceInterface
      * @param PaginatorInterface $paginator          Paginator interface
      * @param ArticleRepository  $articleRepository  Article repository
      */
-    public function __construct(private readonly CategoryRepository $categoryRepository,
-                                private readonly PaginatorInterface $paginator,
-                                private readonly ArticleRepository $articleRepository)
+    public function __construct(private readonly CategoryRepository $categoryRepository, private readonly PaginatorInterface $paginator, private readonly ArticleRepository $articleRepository)
     {
     }
 
@@ -97,10 +95,23 @@ class CategoryService implements CategoryServiceInterface
         try {
             $result = $this->articleRepository->countByCategory($category);
 
-            return !($result > 0);
+            return $result <= 0;
         } catch (NoResultException|NonUniqueResultException) {
             return false;
         }
+    }
 
+    /**
+     * Find by id.
+     *
+     * @param int $id Category id
+     *
+     * @return Category|null Category entity
+     *
+     * @throws NonUniqueResultException
+     */
+    public function findOneById(int $id): ?Category
+    {
+        return $this->categoryRepository->findOneById($id);
     }
 }
