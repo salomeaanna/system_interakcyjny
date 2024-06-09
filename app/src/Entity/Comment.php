@@ -67,7 +67,6 @@ class Comment
      */
     #[ORM\ManyToOne(inversedBy: 'comments')]
     #[Assert\Type(Article::class)]
-    #[Assert\NotBlank]
     private ?Article $article = null;
 
     /**

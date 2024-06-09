@@ -86,7 +86,7 @@ class ArticleController extends AbstractController
             $comment->setArticle($article);
             $commentService->save($comment);
 
-            $this->addFlash('success', 'comment_added');
+            $this->addFlash('success', 'message.comment_added');
 
             return $this->redirectToRoute('article_show', ['id' => $article->getId()]);
         }

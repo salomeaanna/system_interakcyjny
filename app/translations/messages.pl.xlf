@@ -258,6 +258,30 @@
         <source>label.show_comment</source>
         <target>Podgląd komentarza</target>
       </trans-unit>
+      <trans-unit id="title.please_sign_in">
+        <source>title.please_sign_in</source>
+        <target>Zaloguj się</target>
+      </trans-unit>
+      <trans-unit id="label.password">
+        <source>label.password</source>
+        <target>Hasło</target>
+      </trans-unit>
+      <trans-unit id="label.sign_in">
+        <source>label.sign_in</source>
+        <target>Zaloguj się</target>
+      </trans-unit>
+      <trans-unit id="message.comment_added">
+        <source>message.comment_added</source>
+        <target>Dodano nowy komentarz</target>
+      </trans-unit>
+      <trans-unit id="message.invalid_current_password">
+        <source>message.invalid_current_password</source>
+        <target>Wprowadzne hasło jest niepoprawne</target>
+      </trans-unit>
+      <trans-unit id="message.user_edited">
+        <source>message.user_edited</source>
+        <target>Twoje konto zostało edytowane pomyślnie</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

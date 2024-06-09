@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class UserController.
@@ -24,8 +25,9 @@ class UserController extends AbstractController
      * Constructor.
      *
      * @param UserServiceInterface $userService User service interface
+     * @param TranslatorInterface  $translator  Translator
      */
-    public function __construct(private readonly UserServiceInterface $userService)
+    public function __construct(private readonly UserServiceInterface $userService, private readonly TranslatorInterface $translator)
     {
     }
 
@@ -57,7 +59,10 @@ class UserController extends AbstractController
             if ($passwordHasher->isPasswordValid($user, $data['current_password'])) {
                 $user->setPassword($passwordHasher->hashPassword($user, $data['password']));
             } else {
-                $this->addFlash('danger', 'invalid_current_password');
+                $this->addFlash(
+                    'danger',
+                    $this->translator->trans('message.invalid_current_password')
+                );
 
                 return $this->redirectToRoute('user_edit');
             }
@@ -65,7 +70,10 @@ class UserController extends AbstractController
             $user->setEmail($data['email']);
             $this->userService->save($user);
 
-            $this->addFlash('success', 'user_edited');
+            $this->addFlash(
+                'success',
+                $this->translator->trans('message.user_edited')
+            );
 
             return $this->redirectToRoute('user_edit');
         }

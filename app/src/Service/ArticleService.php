@@ -9,7 +9,6 @@ use App\Dto\ArticleListInputFiltersDto;
 use App\Dto\ArticleListFiltersDto;
 use App\Entity\Article;
 use App\Repository\ArticleRepository;
-use Doctrine\ORM\NonUniqueResultException;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
 
@@ -47,8 +46,6 @@ class ArticleService implements ArticleServiceInterface
      * @param ArticleListInputFiltersDto $filters Filters
      *
      * @return PaginationInterface<string, mixed> Paginated list
-     *
-     * @throws NonUniqueResultException
      */
     public function getPaginatedList(int $page, ArticleListInputFiltersDto $filters): PaginationInterface
     {

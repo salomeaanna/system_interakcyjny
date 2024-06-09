@@ -219,7 +219,7 @@ class Article
     /**
      * Setter for category.
      *
-     * @param Category $category Category
+     * @param Category|null $category Category
      */
     public function setCategory(?Category $category): void
     {

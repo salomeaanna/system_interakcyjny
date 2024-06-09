@@ -258,6 +258,30 @@
         <source>action.back_to_comment_list</source>
         <target>Back to comment list</target>
       </trans-unit>
+      <trans-unit id="title.please_sign_in">
+        <source>title.please_sign_in</source>
+        <target>Please sign in</target>
+      </trans-unit>
+      <trans-unit id="label.password">
+        <source>label.password</source>
+        <target>Password</target>
+      </trans-unit>
+      <trans-unit id="label.sign_in">
+        <source>label.sign_in</source>
+        <target>Sign in</target>
+      </trans-unit>
+      <trans-unit id="message.comment_added">
+        <source>message.comment_added</source>
+        <target>Comment added</target>
+      </trans-unit>
+      <trans-unit id="message.invalid_current_password">
+        <source>message.invalid_current_password</source>
+        <target>Current password is invalid</target>
+      </trans-unit>
+      <trans-unit id="message.user_edited">
+        <source>message.user_edited</source>
+        <target>Your account was edited successfully</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

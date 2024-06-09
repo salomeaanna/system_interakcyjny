@@ -8,6 +8,8 @@ namespace App\DataFixtures;
 use App\Entity\Article;
 use App\Entity\Category;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Persistence\ObjectManager;
+use Faker\Generator;
 
 /**
  * Class ArticleFixtures.
@@ -23,7 +25,7 @@ class ArticleFixtures extends AbstractBaseFixtures implements DependentFixtureIn
      */
     public function loadData(): void
     {
-        if (!$this->manager instanceof \Doctrine\Persistence\ObjectManager || !$this->faker instanceof \Faker\Generator) {
+        if (!$this->manager instanceof ObjectManager || !$this->faker instanceof Generator) {
             return;
         }
 

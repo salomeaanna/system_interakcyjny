@@ -5,6 +5,7 @@
 
 namespace App\Security\Voter;
 
+use App\Entity\Comment;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -39,7 +40,7 @@ class CommentVoter extends Voter
     protected function supports(string $attribute, mixed $subject): bool
     {
         return in_array($attribute, [self::DELETE, self::EDIT])
-            && $subject instanceof \App\Entity\Comment;
+            && $subject instanceof Comment;
     }
 
     /**
