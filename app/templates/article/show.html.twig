@@ -17,7 +17,7 @@
                             {{ article.category.title }}
                         </a>
                     </span>
-                    <p class="card-text">{{ article.updatedAt|date('Y/m/d') }}</p>
+                    <p class="card-text">{{ article.updatedAt|format_date('long') }}</p>
                 </div>
             </div>
             <div class="row mb-4">

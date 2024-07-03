@@ -65,7 +65,7 @@ class Comment
      *
      * @var Article|null article
      */
-    #[ORM\ManyToOne(targetEntity: Article::class,  cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(targetEntity: Article::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Assert\Type(Article::class)]
     private ?Article $article = null;

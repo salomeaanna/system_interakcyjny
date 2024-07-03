@@ -31,17 +31,24 @@ in your `host` file.
 * Enter the PHP container:
 
 ```bash
+docker-compose up -d
 docker-compose exec php bash
 ```
 
-* To install Symfony LTS inside container execute:
+* To install project:
 
 ```bash
 cd app
-rm .gitkeep
-git config --global user.email "you@example.com"
-symfony new ../app --version=lts --webapp
-chown -R dev.dev *
+composer install
+composer init-app
+```
+
+## Static analysis
+
+* To run scripts:
+
+```bash
+composer static-analysis
 ```
 
 ## Container URLs and ports

@@ -6,8 +6,6 @@
 namespace App\Entity;
 
 use App\Repository\ArticleRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -86,23 +84,6 @@ class Article
     #[Assert\Type(Category::class)]
     #[Assert\NotBlank]
     private ?Category $category = null;
-
-//    /**
-//     * Comments.
-//     *
-//     * @var Collection<int, Comment> Comment collection
-//     */
-//    #[ORM\OneToMany(mappedBy: 'article', targetEntity: Comment::class, cascade: ['persist', 'remove'])]
-//    #[ORM\JoinColumn(name: 'article_id', referencedColumnName: 'id')]
-//    private Collection $comments;
-
-//    /**
-//     * Constructor.
-//     */
-//    public function __construct()
-//    {
-//        $this->comments = new ArrayCollection();
-//    }
 
     /**
      * Getter for Id.
@@ -194,18 +175,6 @@ class Article
         $this->content = $content;
     }
 
-    //    public function getSlug(): ?string
-    //    {
-    //        return $this->slug;
-    //    }
-    //
-    //    public function setSlug(string $slug): static
-    //    {
-    //        $this->slug = $slug;
-    //
-    //        return $this;
-    //    }
-
     /**
      * Getter for category.
      *
@@ -225,40 +194,4 @@ class Article
     {
         $this->category = $category;
     }
-
-//    /**
-//     * Getter for comments.
-//     *
-//     * @return Collection<int, Comment> comment
-//     */
-//    public function getComments(): Collection
-//    {
-//        return $this->comments;
-//    }
-//
-//    /**
-//     * Add comment.
-//     *
-//     * @param Comment $comment comment
-//     */
-//    public function addComment(Comment $comment): void
-//    {
-//        if (!$this->comments->contains($comment)) {
-//            $this->comments->add($comment);
-//            $comment->setArticle($this);
-//        }
-//    }
-//
-//    /**
-//     * Remove comment.
-//     *
-//     * @param Comment $comment comment
-//     */
-//    public function removeComment(Comment $comment): void
-//    {
-//        // set the owning side to null (unless already changed)
-//        if ($this->comments->removeElement($comment) && $comment->getArticle() === $this) {
-//            $comment->setArticle(null);
-//        }
-//    }
 }
